@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+vlora_temp.mp3
+.venv/
+.env
