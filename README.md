@@ -28,7 +28,7 @@ Vlora AI is a personal voice assistant designed specifically to understand Indon
 * **Global Hotkey Activation:** Trigger the assistant anytime using `Ctrl + Alt + V`.
 * **Silent Background Execution:** Automatically listens in the background via VBScript without popup terminal windows.
 * **App & Site Launcher:** Fast command mapping for Spotify, VS Code, Discord, YouTube, Gemini, and more.
-* **Natural Voice Feedback:** High-quality Indonesian Text-to-Speech response system.
+* **Natural Voice Feedback:** High quality Indonesian Text-to-Speech response system.
 
 ---
 
@@ -39,7 +39,7 @@ Vlora AI is a personal voice assistant designed specifically to understand Indon
 | Python 3.11+ | Core programming language |
 | SpeechRecognition | Speech-to-text integration using Google Speech API |
 | gTTS & Pygame | Natural Indonesian voice feedback and audio playback |
-| Keyboard | Low-level global hotkey listener for Windows |
+| Keyboard | Low level global hotkey listener for Windows |
 | VBScript | Silent background launcher execution |
 
 ---
