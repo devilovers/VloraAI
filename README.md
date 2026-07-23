@@ -7,8 +7,8 @@ An intelligent Windows voice assistant tailored for Indonesian spoken commands, 
 <p>
   <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white">
   <img src="https://img.shields.io/badge/Platform-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white">
-  <img src="https://img.shields.io/badge/Speech-Google_Speech-4285F4?style=for-the-badge&logo=google&logoColor=white">
-  <img src="https://img.shields.io/badge/TTS-gTTS-00C853?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Speech-Google_Speech-EA4335?style=for-the-badge&logo=google&logoColor=white">
+  <img src="https://img.shields.io/badge/TTS-gTTS-FF9900?style=for-the-badge">
   <img src="https://img.shields.io/badge/Status-Completed-00C853?style=for-the-badge">
 </p>
 
@@ -58,14 +58,18 @@ Follow these steps to set up Vlora AI on your local machine from scratch.
 
 Open Command Prompt (CMD) and run:
 
+```bash
 git clone https://github.com/devilovers/VloraAI.git
 cd VloraAI
+```
 
 ### 2. Install Dependencies
 
 Install all required Python libraries:
 
+```bash
 pip install speechrecognition gtts pygame keyboard
+```
 
 ---
 
@@ -75,9 +79,11 @@ pip install speechrecognition gtts pygame keyboard
 
 You can start the hotkey listener manually using Command Prompt:
 
+```bash
 python launcher.py
+```
 
-Press Ctrl + Alt + V anywhere on your system to activate Vlora, then speak your command (e.g., "Halo Vlora, buka YouTube").
+Press **`Ctrl` + `Alt` + `V`** anywhere on your system to activate Vlora, then speak your command (e.g., *"Halo Vlora, buka YouTube"*).
 
 ---
 
@@ -85,15 +91,17 @@ Press Ctrl + Alt + V anywhere on your system to activate Vlora, then speak your 
 
 To make Vlora run automatically in the background when Windows boots up without opening any terminal windows:
 
-1. Create a file named start_silent.vbs in your project folder with the following content:
+1. Create a file named **`start_silent.vbs`** in your project folder with the following content:
 
+   ```vbs
    Set WshShell = CreateObject("WScript.Shell")
    Set fso = CreateObject("Scripting.FileSystemObject")
    currentDir = fso.GetAbsolutePathName(".")
-   WshShell.Run "cmd /c cd /d """ & currentDir & """ && python launcher.py", 0, False
+   WshShell.Run "cmd /c cd /d " & Chr(34) & currentDir & Chr(34) & " && python launcher.py", 0, False
+   ```
 
-2. Press Win + R, type shell:startup, and press Enter.
-3. Copy your start_silent.vbs file and paste it as a Shortcut into the Startup folder.
+2. Press **`Win` + `R`**, type `shell:startup`, and press **Enter**.
+3. Copy your `start_silent.vbs` file and paste it as a **Shortcut** into the Startup folder.
 
 ---
 
