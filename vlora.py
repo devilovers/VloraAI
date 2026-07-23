@@ -5,6 +5,7 @@ import webbrowser
 import os
 import sys
 import time
+import subprocess
 
 pygame.mixer.init()
 
@@ -28,112 +29,203 @@ def vlora_bicara(teks):
         print(f"[Error Suara]: {e}")
 
 SITES = {
-    "youtube": "https://www.youtube.com",
-    "yutub": "https://www.youtube.com",
-    "yu tub": "https://www.youtube.com",
-    "utub": "https://www.youtube.com",
-    "github": "https://www.github.com",
-    "git hab": "https://www.github.com",
-    "chat gpt": "https://chatgpt.com",
-    "chatgpt": "https://chatgpt.com",
-    "cat gpt": "https://chatgpt.com",
-    "gemini": "https://gemini.google.com",
-    "geminai": "https://gemini.google.com",
-    "chrome": "https://www.google.com",
-    "krom": "https://www.google.com",
-    "google": "https://www.google.com",
-    "whatsapp web": "https://web.whatsapp.com",
-    "wa web": "https://web.whatsapp.com"
+    "https://www.youtube.com": {
+        "nama": "YouTube",
+        "keywords": ["youtube", "yutub", "yu tub", "utub", "yt", "yutup", "tub", "you tube", "yutob", "yutubku", "pideo", "video", "nonton"]
+    },
+    "https://www.github.com": {
+        "nama": "GitHub",
+        "keywords": ["github", "git hab", "git", "githab", "git hub", "githubku", "repo", "repository", "gethuk", "getuk"]
+    },
+    "https://chatgpt.com": {
+        "nama": "ChatGPT",
+        "keywords": ["chat gpt", "chatgpt", "cat gpt", "gpt", "gepete", "cet gpt", "capete", "chat jipiti", "jipiti", "ai"]
+    },
+    "https://gemini.google.com": {
+        "nama": "Gemini",
+        "keywords": ["gemini", "geminai", "gemni", "jiminy", "gemini google", "jemini", "jimani"]
+    },
+    "https://www.google.com": {
+        "nama": "Google",
+        "keywords": ["chrome", "krom", "google", "gugel", "gugl", "browser", "browsing", "internet", "search", "cari"]
+    },
+    "https://web.whatsapp.com": {
+        "nama": "WhatsApp Web",
+        "keywords": ["whatsapp web", "wa web", "web wa", "wasap web", "watsap web", "web whatsapp"]
+    },
+    "https://www.pinterest.com": {
+        "nama": "Pinterest",
+        "keywords": ["pinterest", "pinteres", "pin", "pinter", "pinters", "finteres", "gambar", "foto", "referensi"]
+    },
+    "https://pmb.poliban.ac.id/login": {
+        "nama": "web poliban",
+        "keywords": ["poliban", "pmb poliban", "kampus", "kuliah", "pmb", "poliban pmb", "web poliban", "login poliban", "polybag", "polibag", "poli bag", "poly bag", "polibak", "volleyball", "vollyball", "voleyball", "volyball"]
+    },
+    "http://localhost/myfinance/pages/dashboard.php": {
+        "nama": "My Finance",
+        "keywords": ["my finance", "myfinance", "finance", "keuangan", "finan", "mai finance", "mai finan", "my finan", "dashboard keuangan"]
+    }
 }
 
 APPS = {
-    "vscode": "code",
-    "vs code": "code",
-    "pescode": "code",
-    "viescode": "code",
-    "visual studio code": "code",
-    "spotify": f"C:\\Users\\{os.getlogin()}\\AppData\\Roaming\\Spotify\\Spotify.exe",
-    "spotifi": f"C:\\Users\\{os.getlogin()}\\AppData\\Roaming\\Spotify\\Spotify.exe",
-    "discord": f"C:\\Users\\{os.getlogin()}\\AppData\\Local\\Discord\\Update.exe --processStart Discord.exe",
-    "diskor": f"C:\\Users\\{os.getlogin()}\\AppData\\Local\\Discord\\Update.exe --processStart Discord.exe",
-    "whatsapp": f"C:\\Users\\{os.getlogin()}\\AppData\\Local\\WhatsApp\\WhatsApp.exe",
-    "wa": f"C:\\Users\\{os.getlogin()}\\AppData\\Local\\WhatsApp\\WhatsApp.exe"
+    "VS Code": {
+        "target": "code",
+        "keywords": ["vscode", "vs code", "pescode", "viescode", "visual studio code", "koding", "kod", "code", "bescode", "vsc", "pes code", "vescode", "biscode", "coding", "editor"]
+    },
+    "Spotify": {
+        "target": [f"C:\\Users\\{os.getlogin()}\\AppData\\Roaming\\Spotify\\Spotify.exe", "spotify:"],
+        "keywords": ["spotify", "spotifi", "lagu", "musik", "spoti", "supotifi", "espotifi", "potifi", "pemutar musik"]
+    },
+    "WhatsApp": {
+        "target": ["whatsapp:", f"C:\\Users\\{os.getlogin()}\\AppData\\Local\\WhatsApp\\WhatsApp.exe"],
+        "keywords": ["whatsapp", "wa", "watsap", "wasap", "chat", "watsup", "pesan", "wa desktop"]
+    },
+    "Word": {
+        "target": "winword",
+        "keywords": ["word", "ms word", "werd", "mikey word", "microsoft word", "ngetik", "dokumen word"]
+    },
+    "Excel": {
+        "target": "excel",
+        "keywords": ["excel", "ms excel", "eksel", "microsoft excel", "eskel", "tabel"]
+    },
+    "PowerPoint": {
+        "target": "powerpnt",
+        "keywords": ["powerpoint", "power point", "ppt", "paling poos", "pwer point", "presentasi", "merek slide"]
+    },
+    "XAMPP": {
+        "target": ["C:\\xampp\\xampp-control.exe", "xampp-control"],
+        "keywords": ["xampp", "ksamp", "examp", "samp", "xam", "server", "xampp control", "sams", "sam"]
+    },
+    "Roblox": {
+        "target": [f"C:\\Users\\{os.getlogin()}\\OneDrive\\Desktop\\Roblox Player.lnk", f"C:\\Users\\{os.getlogin()}\\Desktop\\Roblox Player.lnk", "roblox:"],
+        "keywords": ["roblox", "roblok", "roblos", "game", "robloks", "main game"]
+    },
+    "Canva": {
+        "target": [f"C:\\Users\\{os.getlogin()}\\AppData\\Local\\Programs\\Canva\\Canva.exe", "https://www.canva.com"],
+        "keywords": ["canva", "kanva", "desain", "canba", "edit foto"]
+    },
+    "File Explorer": {
+        "target": "explorer",
+        "keywords": ["file saya", "file", "explorer", "file manager", "folder", "dokumen", "berkas", "buka folder", "buka file", "my computer", "komputer"]
+    },
+    "Kamera": {
+        "target": "microsoft.windows.camera:",
+        "keywords": ["kamera", "camera", "cam", "foto kamera", "kamera laptop", "webcam"]
+    }
 }
+
+def buka_aplikasi(app_target):
+    if isinstance(app_target, list):
+        for path in app_target:
+            try:
+                if path.startswith("http://") or path.startswith("https://"):
+                    webbrowser.open(path)
+                    return True
+                elif os.path.exists(path):
+                    os.startfile(path)
+                    return True
+                elif ":" in path and not os.path.isabs(path):
+                    os.startfile(path)
+                    return True
+            except Exception:
+                continue
+        return False
+    else:
+        try:
+            if app_target.startswith("http://") or app_target.startswith("https://"):
+                webbrowser.open(app_target)
+            elif ":" in app_target and not os.path.isabs(app_target):
+                os.startfile(app_target)
+            else:
+                os.system(f"start {app_target}")
+            return True
+        except Exception:
+            return False
+
+def tutup_terminal():
+    pid = os.getpid()
+    subprocess.Popen(f"taskkill /F /PID {pid}", shell=True)
 
 def eksekusi_perintah(perintah):
     perintah = perintah.lower().replace(".", "").replace(",", "").strip()
     
-    for site_keyword, url in SITES.items():
-        if site_keyword in perintah:
-            vlora_bicara(f"Siap! Berhasil membuka {site_keyword} di browser.")
-            webbrowser.open(url)
-            return
-
-    for app_keyword, path in APPS.items():
-        if app_keyword in perintah:
-            try:
-                vlora_bicara(f"Siap! Berhasil menjalankan aplikasi {app_keyword}.")
-                os.system(f'start "" "{path}"')
-            except Exception as e:
-                vlora_bicara(f"Maaf, gagal membuka {app_keyword}. Jalur aplikasi tidak ditemukan.")
-            return
-
-    if "matikan" in perintah or "keluar" in perintah or "berhenti" in perintah or "stop" in perintah:
+    KATA_NONAKTIF = [
+        "nonaktifkan", "non aktifkan", "matikan", "keluar", "berhenti", 
+        "stop", "off", "tutup", "dada", "bye", "daah", "dadah", "close", "sleep"
+    ]
+    if any(k in perintah for k in KATA_NONAKTIF):
         vlora_bicara("Sistem Vlora dinonaktifkan. Sampai jumpa.")
-        sys.exit()
+        time.sleep(0.5)
+        tutup_terminal()
+        return
+
+    for nama_aplikasi, data in APPS.items():
+        for kw in data["keywords"]:
+            if kw in perintah:
+                vlora_bicara(f"Siap! Membuka aplikasi {nama_aplikasi}.")
+                berhasil = buka_aplikasi(data["target"])
+                if not berhasil:
+                    vlora_bicara(f"Maaf, gagal membuka {nama_aplikasi}. Jalur aplikasi tidak ditemukan.")
+                return
+
+    for url, data in SITES.items():
+        for kw in data["keywords"]:
+            if kw in perintah:
+                vlora_bicara(f"Siap! Berhasil membuka {data['nama']} di browser.")
+                webbrowser.open(url)
+                return
 
     vlora_bicara("Maaf, perintah tidak terdaftar dalam sistem.")
 
 def dengarkan_suara():
     recognizer = sr.Recognizer()
-    recognizer.dynamic_energy_threshold = True
+    recognizer.energy_threshold = 120
+    recognizer.dynamic_energy_threshold = False
     recognizer.pause_threshold = 0.8
 
     with sr.Microphone() as source:
-        print("\n[Mendengarkan...] Katakan 'Halo Vlora' lalu perintahmu")
+        print("\n[Mendengarkan...] Katakan perintahmu...")
+        recognizer.adjust_for_ambient_noise(source, duration=0.2)
         
         try:
-            audio = recognizer.listen(source, timeout=None, phrase_time_limit=6)
+            audio = recognizer.listen(source, timeout=None, phrase_time_limit=7)
             teks = recognizer.recognize_google(audio, language="id-ID")
             print(f"[Input Suara Terdeteksi]: '{teks}'")
             return teks.lower()
         except sr.UnknownValueError:
-            print("[Sistem]: Suara tidak terdeteksi dengan jelas.")
+            print("[Sistem]: Suara kurang jelas, mencoba mendengarkan lagi...")
             return ""
         except sr.RequestError:
             vlora_bicara("Koneksi internet bermasalah. Layanan pengenal suara tidak merespons.")
             return ""
 
 if __name__ == "__main__":
-    vlora_bicara("Sistem Vlora online dan siap menerima perintah.")
+    vlora_bicara("Sistem Vlora aktif dan siap menerima perintah.")
     
-    HALO_VARIATIONS = ["halo", "hallo", "helo", "hello", "hi", "hai", "aloh", "alo"]
-    NAME_VARIATIONS = ["vlora", "flora", "velora", "plora", "blora", "lora", "folra"]
-
-    WAKE_WORDS = []
-    for halo in HALO_VARIATIONS:
-        for name in NAME_VARIATIONS:
-            WAKE_WORDS.append(f"{halo} {name}")
-    
-    WAKE_WORDS.extend(NAME_VARIATIONS)
+    NAME_VARIATIONS = [
+        "vlora", "flora", "velora", "plora", "blora", "lora", "folra", "bora", 
+        "vora", "mora", "ra", "lor", "flo", "la", "oi", "hey", "hei", "bro", "sis",
+        "halo", "hallo", "wong", "mang", "bang", "kak", "mbak", "lur", "slur"
+    ]
 
     while True:
         input_teks = dengarkan_suara()
         
         if input_teks:
-            input_bersih = input_teks.replace(".", "").replace(",", "")
-            ditemukan = False
+            input_bersih = input_teks.replace(".", "").replace(",", "").strip()
             
-            for wake_word in WAKE_WORDS:
-                if wake_word in input_bersih:
-                    perintah = input_bersih.split(wake_word)[-1].strip()
-                    ditemukan = True
-                    
-                    if perintah:
-                        eksekusi_perintah(perintah)
-                    else:
-                        vlora_bicara("Ya, ada yang bisa Vlora bantu?")
-                    break
+            ditemukan_panggilan = any(nama in input_bersih for nama in NAME_VARIATIONS)
             
-            if not ditemukan and len(input_bersih) > 0:
-                print(f"[Info]: Panggilan tidak terdeteksi dari ucapan: '{input_bersih}'")
+            if ditemukan_panggilan:
+                perintah = input_bersih
+                for nama in NAME_VARIATIONS:
+                    if nama in perintah:
+                        perintah = perintah.split(nama)[-1].strip()
+                        break
+                
+                if perintah:
+                    eksekusi_perintah(perintah)
+                else:
+                    vlora_bicara("Ya, ada yang bisa Vlora bantu?")
+            else:
+                eksekusi_perintah(input_bersih)
